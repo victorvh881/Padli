@@ -3,13 +3,14 @@ import { defineConfig } from "@neon/config/v1";
 export default defineConfig({
   // Declare your Neon services here
   auth: true,
-  aiGateway: true,
+  // AI Gateway vraagt een betaald Neon-abonnement. Zet dit terug op true na een upgrade.
+  // aiGateway: true,
   functions: {
     hello: { name: "Hello World", source: "./hello.ts" },
   },
   buckets: {
     // "private" is the default; use "public_read" for anonymous reads
-    assets: { access: "private" },
+    uploads: { access: "private" },
   },
   // Branch policy: per-branch tuning
   branch: (branch) => {
