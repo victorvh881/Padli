@@ -1,9 +1,9 @@
-# Padli
+# Padoo
 
-**Vind. Speel. Verbind.** Padli is een website waarop padelspelers in Leuven en omgeving medespelers van hun niveau vinden,
+**Vind. Speel. Verbind.** Padoo is een website waarop padelspelers in Leuven en omgeving medespelers van hun niveau vinden,
 oproepen plaatsen en elkaar berichten sturen. Alles werkt in de browser, op gsm, tablet en computer.
 
-Dit is de eerste versie (MVP) volgens het softwareontwerp "Padli – Softwareontwerp MVP en schaalbare versie".
+Dit is de eerste versie (MVP) volgens het softwareontwerp "Padoo – Softwareontwerp MVP en schaalbare versie".
 
 ## Wat zit erin?
 
@@ -43,9 +43,9 @@ Zonder `BREVO_API_KEY` worden nieuwe accounts meteen geactiveerd en verschijnen 
 
 1. Maak een gratis database bij [Neon](https://neon.tech) in regio **Frankfurt (EU)**. Kopieer twee verbindings-URL's:
    de "pooled" URL (`DATABASE_URL`) en de directe URL zonder `-pooler` (`DIRECT_URL`).
-2. Maak een gratis account bij [Vercel](https://vercel.com) met je GitHub-account en importeer de repository `padli`.
-3. Vul bij **Environment Variables** in: `DATABASE_URL`, `DIRECT_URL`, `APP_URL` (bv. `https://padli.vercel.app`),
+2. Maak een gratis account bij [Vercel](https://vercel.com) met je GitHub-account en importeer de repository `padoo`.
+3. Vul bij **Environment Variables** in: `DATABASE_URL`, `DIRECT_URL`, `APP_URL` (bv. `https://padoo.vercel.app`),
    en voor je eigen beheerdersaccount `ADMIN_EMAIL` en `ADMIN_PASSWORD`.
 4. Klik op **Deploy**. Vercel maakt de tabellen, vult niveaus en gemeenten in en zet de site online.
-5. Later: koppel je eigen domein (bv. padli.be) in Vercel, zet e-mail aan met een gratis Brevo-account
+5. Later: koppel je eigen domein (bv. padoo.be) in Vercel, zet e-mail aan met een gratis Brevo-account
    (`BREVO_API_KEY` en `EMAIL_FROM`), en laat ucll.info/cjup doorverwijzen naar het nieuwe adres.

@@ -1,4 +1,4 @@
-// Padli datamodel (MVP). Gebaseerd op sectie 7 van het softwareontwerp.
+// Padoo datamodel (MVP). Gebaseerd op sectie 7 van het softwareontwerp.
 
 generator client {
   provider = "prisma-client-js"

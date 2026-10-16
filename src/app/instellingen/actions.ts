@@ -28,10 +28,10 @@ export async function deleteAccount(_: ActionState, form: FormData): Promise<Act
     }),
     db.user.update({
       where: { id: user.id },
-      data: { email: `${anon}@verwijderd.padli`, passwordHash: "-", status: "deleted", deletedAt: new Date() },
+      data: { email: `${anon}@verwijderd.padoo`, passwordHash: "-", status: "deleted", deletedAt: new Date() },
     }),
   ]);
   await audit(user.id, "account_deleted", "user", user.id);
-  (await cookies()).delete("padli_session");
+  (await cookies()).delete("padoo_session");
   redirect("/?verwijderd=1");
 }

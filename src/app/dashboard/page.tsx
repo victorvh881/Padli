@@ -66,7 +66,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     <div className="space-y-8">
       {welkom && (
         <p className="rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-brand-900">
-          Welkom bij Padli, {me.displayName}! Hieronder vind je oproepen en spelers die bij jou passen.
+          Welkom bij Padoo, {me.displayName}! Hieronder vind je oproepen en spelers die bij jou passen.
         </p>
       )}
       {user.status === "pending_verification" && (

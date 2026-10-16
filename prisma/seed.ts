@@ -72,7 +72,7 @@ async function main() {
           emailVerifiedAt: new Date(),
           termsVersion: "2026-10",
           termsAcceptedAt: new Date(),
-          profile: { create: { username: "padli-team", displayName: "Padli-team", isSearchable: false } },
+          profile: { create: { username: "padoo-team", displayName: "Padoo-team", isSearchable: false } },
         },
       });
     }

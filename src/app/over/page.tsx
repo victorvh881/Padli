@@ -1,14 +1,14 @@
 import Link from "next/link";
 
-export const metadata = { title: "Over Padli" };
+export const metadata = { title: "Over Padoo" };
 
 export default function AboutPage() {
   return (
-    <article className="prose-padli mx-auto max-w-2xl">
-      <h1 className="mb-4 text-3xl font-extrabold">Over Padli</h1>
+    <article className="prose-padoo mx-auto max-w-2xl">
+      <h1 className="mb-4 text-3xl font-extrabold">Over Padoo</h1>
       <p>
-        Padli is een gratis platform voor beginnende en recreatieve padelspelers in Leuven en omgeving. Veel spelers spelen minder dan ze
-        willen: hun vaste groep is klein, de niveaus passen niet en clubgroepen zijn vaak gesloten. Padli brengt spelers samen op niveau en
+        Padoo is een gratis platform voor beginnende en recreatieve padelspelers in Leuven en omgeving. Veel spelers spelen minder dan ze
+        willen: hun vaste groep is klein, de niveaus passen niet en clubgroepen zijn vaak gesloten. Padoo brengt spelers samen op niveau en
         regio, over clubs heen.
       </p>
       <h2>Wat kun je doen?</h2>
@@ -16,7 +16,7 @@ export default function AboutPage() {
         <li>Een profiel maken met je niveau, gemeente en wanneer je kunt spelen.</li>
         <li>Spelers van jouw niveau in de buurt zoeken.</li>
         <li>Een oproep plaatsen als je nog spelers zoekt, of meedoen met een oproep van iemand anders.</li>
-        <li>Afspreken via berichten in Padli, zonder je telefoonnummer te delen.</li>
+        <li>Afspreken via berichten in Padoo, zonder je telefoonnummer te delen.</li>
       </ul>
       <h2>Veilig en privé</h2>
       <p>

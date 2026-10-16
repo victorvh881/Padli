@@ -44,14 +44,14 @@ body {
   .link {
     @apply font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-900;
   }
-  .prose-padli h2 {
+  .prose-padoo h2 {
     @apply mt-8 mb-2 text-xl font-bold;
   }
-  .prose-padli p,
-  .prose-padli ul {
+  .prose-padoo p,
+  .prose-padoo ul {
     @apply mb-3 leading-relaxed text-stone-700;
   }
-  .prose-padli ul {
+  .prose-padoo ul {
     @apply list-disc pl-5;
   }
 }
