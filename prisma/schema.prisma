@@ -1,0 +1,410 @@
+// Padli datamodel (MVP). Gebaseerd op sectie 7 van het softwareontwerp.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  player
+  moderator
+  admin
+}
+
+enum UserStatus {
+  pending_verification
+  active
+  suspended
+  banned
+  deleted
+}
+
+enum TokenType {
+  verify_email
+  reset_password
+}
+
+enum Daypart {
+  morning
+  afternoon
+  evening
+}
+
+enum MatchStatus {
+  open
+  full
+  cancelled
+}
+
+enum ParticipantStatus {
+  pending
+  accepted
+  rejected
+  withdrawn
+}
+
+enum ConversationType {
+  direct
+  match
+}
+
+enum ReportTarget {
+  user
+  match_request
+  message
+}
+
+enum ReportReason {
+  spam
+  harassment
+  inappropriate
+  fake_profile
+  no_show
+  underage
+  other
+}
+
+enum ReportStatus {
+  open
+  in_review
+  resolved
+  dismissed
+}
+
+// ---------- Identiteit ----------
+
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  email           String     @unique // altijd lowercase opgeslagen
+  passwordHash    String     @map("password_hash")
+  birthDate       DateTime   @map("birth_date") @db.Date
+  role            Role       @default(player)
+  status          UserStatus @default(pending_verification)
+  emailVerifiedAt DateTime?  @map("email_verified_at")
+  suspendedUntil  DateTime?  @map("suspended_until")
+  termsVersion    String     @map("terms_version")
+  termsAcceptedAt DateTime   @map("terms_accepted_at")
+  lastActiveAt    DateTime   @default(now()) @map("last_active_at")
+  deletedAt       DateTime?  @map("deleted_at")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  profile            Profile?
+  sessions           Session[]
+  authTokens         AuthToken[]
+  availability       AvailabilitySlot[]
+  matchRequests      MatchRequest[]       @relation("creator")
+  participations     MatchParticipant[]
+  conversationMember ConversationMember[]
+  messages           Message[]
+  blocksMade         Block[]              @relation("blocker")
+  blocksReceived     Block[]              @relation("blocked")
+  reportsMade        Report[]             @relation("reporter")
+  reportsReceived    Report[]             @relation("reportTarget")
+  modActionsDone     ModerationAction[]   @relation("moderator")
+  modActionsReceived ModerationAction[]   @relation("modTarget")
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  tokenHash  String   @unique @map("token_hash")
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model AuthToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  type      TokenType
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@map("auth_tokens")
+}
+
+// ---------- Referentiedata ----------
+
+model Region {
+  id        String   @id @default(uuid()) @db.Uuid
+  parentId  String?  @map("parent_id") @db.Uuid
+  name      String
+  slug      String   @unique
+  type      String // 'area' of 'municipality'
+  lat       Float
+  lng       Float
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order")
+
+  parent        Region?        @relation("tree", fields: [parentId], references: [id], onDelete: Restrict)
+  children      Region[]       @relation("tree")
+  profiles      Profile[]
+  venues        Venue[]
+  matchRequests MatchRequest[]
+
+  @@map("regions")
+}
+
+model Level {
+  id          Int    @id @db.SmallInt
+  code        String @unique
+  name        String
+  rank        Int    @unique @db.SmallInt
+  description String
+
+  profiles       Profile[]
+  matchesAsMin   MatchRequest[] @relation("levelMin")
+  matchesAsMax   MatchRequest[] @relation("levelMax")
+
+  @@map("levels")
+}
+
+model Venue {
+  id        String   @id @default(uuid()) @db.Uuid
+  regionId  String   @map("region_id") @db.Uuid
+  name      String
+  address   String?
+  website   String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  region        Region         @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  matchRequests MatchRequest[]
+
+  @@map("venues")
+}
+
+// ---------- Profiel ----------
+
+model Profile {
+  userId        String    @id @map("user_id") @db.Uuid
+  username      String    @unique
+  displayName   String    @map("display_name")
+  regionId      String?   @map("region_id") @db.Uuid
+  levelId       Int?      @map("level_id") @db.SmallInt
+  bio           String?   @db.VarChar(300)
+  preferredSide String?   @map("preferred_side") // left, right, none
+  isSearchable  Boolean   @default(true) @map("is_searchable")
+  onboardedAt   DateTime? @map("onboarded_at")
+  hiddenAt      DateTime? @map("hidden_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  region Region? @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  level  Level?  @relation(fields: [levelId], references: [id], onDelete: Restrict)
+
+  @@index([regionId, levelId])
+  @@map("profiles")
+}
+
+model AvailabilitySlot {
+  userId  String  @map("user_id") @db.Uuid
+  weekday Int     @db.SmallInt // 0 = maandag ... 6 = zondag
+  daypart Daypart
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, weekday, daypart])
+  @@map("availability_slots")
+}
+
+// ---------- Wedstrijdoproepen ----------
+
+model MatchRequest {
+  id              String      @id @default(uuid()) @db.Uuid
+  creatorId       String      @map("creator_id") @db.Uuid
+  title           String      @db.VarChar(80)
+  startsAt        DateTime    @map("starts_at")
+  durationMinutes Int         @default(90) @map("duration_minutes")
+  regionId        String      @map("region_id") @db.Uuid
+  venueId         String?     @map("venue_id") @db.Uuid
+  locationText    String?     @map("location_text")
+  levelMinId      Int         @map("level_min_id") @db.SmallInt
+  levelMaxId      Int         @map("level_max_id") @db.SmallInt
+  spotsNeeded     Int         @map("spots_needed") @db.SmallInt
+  filledSpots     Int         @default(0) @map("filled_spots") @db.SmallInt
+  description     String?     @db.VarChar(500)
+  autoAccept      Boolean     @default(false) @map("auto_accept")
+  status          MatchStatus @default(open)
+  hiddenAt        DateTime?   @map("hidden_at")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  creator      User               @relation("creator", fields: [creatorId], references: [id], onDelete: Cascade)
+  region       Region             @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  venue        Venue?             @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  levelMin     Level              @relation("levelMin", fields: [levelMinId], references: [id], onDelete: Restrict)
+  levelMax     Level              @relation("levelMax", fields: [levelMaxId], references: [id], onDelete: Restrict)
+  participants MatchParticipant[]
+  conversation Conversation?
+
+  @@index([status, startsAt])
+  @@index([creatorId])
+  @@map("match_requests")
+}
+
+model MatchParticipant {
+  matchRequestId String            @map("match_request_id") @db.Uuid
+  userId         String            @map("user_id") @db.Uuid
+  status         ParticipantStatus @default(pending)
+  message        String?           @db.VarChar(300)
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  matchRequest MatchRequest @relation(fields: [matchRequestId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([matchRequestId, userId])
+  @@index([userId])
+  @@map("match_participants")
+}
+
+// ---------- Berichten ----------
+
+model Conversation {
+  id             String           @id @default(uuid()) @db.Uuid
+  type           ConversationType
+  matchRequestId String?          @unique @map("match_request_id") @db.Uuid
+  lastMessageAt  DateTime         @default(now()) @map("last_message_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  matchRequest MatchRequest?        @relation(fields: [matchRequestId], references: [id], onDelete: SetNull)
+  members      ConversationMember[]
+  messages     Message[]
+
+  @@map("conversations")
+}
+
+model ConversationMember {
+  conversationId String    @map("conversation_id") @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  // false = berichtverzoek nog niet geaccepteerd door deze deelnemer
+  accepted       Boolean   @default(true)
+  lastReadAt     DateTime? @map("last_read_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@index([userId])
+  @@map("conversation_members")
+}
+
+model Message {
+  id             String    @id @default(uuid()) @db.Uuid
+  conversationId String    @map("conversation_id") @db.Uuid
+  senderId       String?   @map("sender_id") @db.Uuid
+  body           String    @db.VarChar(2000)
+  hiddenAt       DateTime? @map("hidden_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User?        @relation(fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
+
+// ---------- Veiligheid en moderatie ----------
+
+model Block {
+  blockerId String   @map("blocker_id") @db.Uuid
+  blockedId String   @map("blocked_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  blocker User @relation("blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([blockerId, blockedId])
+  @@index([blockedId])
+  @@map("blocks")
+}
+
+model Report {
+  id           String       @id @default(uuid()) @db.Uuid
+  reporterId   String?      @map("reporter_id") @db.Uuid
+  targetType   ReportTarget @map("target_type")
+  targetId     String       @map("target_id") @db.Uuid
+  targetUserId String?      @map("target_user_id") @db.Uuid
+  reason       ReportReason
+  details      String?      @db.VarChar(1000)
+  severity     Int          @default(2) @db.SmallInt
+  status       ReportStatus @default(open)
+  resolvedAt   DateTime?    @map("resolved_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  reporter   User?              @relation("reporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  targetUser User?              @relation("reportTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+  actions    ModerationAction[]
+
+  @@index([status, severity(sort: Desc), createdAt])
+  @@map("reports")
+}
+
+model ModerationAction {
+  id           String    @id @default(uuid()) @db.Uuid
+  reportId     String?   @map("report_id") @db.Uuid
+  moderatorId  String    @map("moderator_id") @db.Uuid
+  targetUserId String?   @map("target_user_id") @db.Uuid
+  action       String // dismiss, hide_content, warn, suspend, ban, unban
+  reason       String
+  expiresAt    DateTime? @map("expires_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  report     Report? @relation(fields: [reportId], references: [id], onDelete: Restrict)
+  moderator  User    @relation("moderator", fields: [moderatorId], references: [id], onDelete: Restrict)
+  targetUser User?   @relation("modTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@map("moderation_actions")
+}
+
+// ---------- Meldingen en systeem ----------
+
+model Notification {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  type      String
+  title     String
+  body      String?
+  link      String?
+  readAt    DateTime? @map("read_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  actorId    String?  @map("actor_id") @db.Uuid
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String?  @map("entity_id")
+  data       Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
