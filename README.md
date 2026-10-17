@@ -29,7 +29,7 @@ e-mail via Brevo (optioneel).
 ## Lokaal starten (voor ontwikkelaars)
 
 ```bash
-cp .env.example .env          # vul DATABASE_URL en DIRECT_URL in
+cp .env.example .env          # vul DATABASE_URL en DATABASE_URL_UNPOOLED in
 npm install
 npx prisma migrate dev        # maakt de tabellen
 npm run db:seed               # niveaus en gemeenten rond Leuven
@@ -41,10 +41,12 @@ Zonder `BREVO_API_KEY` worden nieuwe accounts meteen geactiveerd en verschijnen 
 
 ## Online zetten (gratis)
 
-1. Maak een gratis database bij [Neon](https://neon.tech) in regio **Frankfurt (EU)**. Kopieer twee verbindings-URL's:
-   de "pooled" URL (`DATABASE_URL`) en de directe URL zonder `-pooler` (`DIRECT_URL`).
+1. De Neon-diensten staan in `neon.ts` (Postgres, Auth, Object Storage met bucket `uploads`, Functions).
+   `neon deploy` zet ze klaar en schrijft de variabelen naar `.env.local`. Daarna controleert `npm run neon:check`
+   of elke dienst werkt. De database-URL's zijn `DATABASE_URL` (pooled) en `DATABASE_URL_UNPOOLED` (direct, voor migraties).
 2. Maak een gratis account bij [Vercel](https://vercel.com) met je GitHub-account en importeer de repository `padoo`.
-3. Vul bij **Environment Variables** in: `DATABASE_URL`, `DIRECT_URL`, `APP_URL` (bv. `https://padoo.vercel.app`),
+3. Vul bij **Environment Variables** de Neon-variabelen uit `.env.local` in (`DATABASE_URL`, `DATABASE_URL_UNPOOLED`,
+   `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION`), plus `APP_URL` (bv. `https://padoo.vercel.app`),
    en voor je eigen beheerdersaccount `ADMIN_EMAIL` en `ADMIN_PASSWORD`.
 4. Klik op **Deploy**. Vercel maakt de tabellen, vult niveaus en gemeenten in en zet de site online.
 5. Later: koppel je eigen domein (bv. padoo.be) in Vercel, zet e-mail aan met een gratis Brevo-account
