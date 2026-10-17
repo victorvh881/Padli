@@ -1,5 +1,5 @@
 {
-  "name": "padli",
+  "name": "padoo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,12 +12,17 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy && tsx prisma/seed.ts && next build"
+    "vercel-build": "prisma generate && prisma migrate deploy && tsx prisma/seed.ts && next build",
+    "neon:check": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/neon-check.mts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
+    "@aws-sdk/s3-request-presigner": "^3.1152.0",
+    "@neon/config": "^1.9.2",
+    "@neon/env": "^1.6.3",
     "@node-rs/argon2": "^2.2.2",
     "@prisma/client": "^6.19.3",
     "next": "^16.4.2",
@@ -27,6 +32,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",

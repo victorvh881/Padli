@@ -6,7 +6,7 @@ import { hash, verify } from "@node-rs/argon2";
 import { db } from "./db";
 import { hashToken, newToken } from "./tokens";
 
-const COOKIE = "padli_session";
+const COOKIE = "padoo_session";
 const SESSION_DAYS = 30;
 
 export const hashPassword = (password: string) => hash(password);

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Padli",
-    short_name: "Padli",
+    name: "Padoo",
+    short_name: "Padoo",
     description: "Vind padelspelers van jouw niveau in Leuven en omgeving.",
     start_url: "/dashboard",
     display: "standalone",

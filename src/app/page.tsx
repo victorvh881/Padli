@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ v
 
   return (
     <div className="space-y-12">
-      {verwijderd && <p className="rounded-xl bg-stone-100 px-4 py-3">Je account is verwijderd. Bedankt dat je Padli gebruikte.</p>}
+      {verwijderd && <p className="rounded-xl bg-stone-100 px-4 py-3">Je account is verwijderd. Bedankt dat je Padoo gebruikte.</p>}
 
       <section className="-mx-4 rounded-none bg-gradient-to-br from-brand-700 to-brand-900 px-6 py-12 text-white sm:mx-0 sm:rounded-3xl sm:px-10 sm:py-16">
         <p className="mb-3 inline-block rounded-full bg-ball px-3 py-1 text-sm font-bold text-brand-900">Leuven en omgeving</p>
@@ -43,7 +43,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ v
         {[
           ["🔎", "Vind", "Spelers en oproepen van jouw niveau, van complete beginner tot P300, in jouw gemeente."],
           ["🎾", "Speel", "Plaats in een paar klikken een oproep of doe mee met een partij die al gepland is."],
-          ["💬", "Verbind", "Spreek af via berichten in Padli. Je telefoonnummer en e-mail blijven privé."],
+          ["💬", "Verbind", "Spreek af via berichten in Padoo. Je telefoonnummer en e-mail blijven privé."],
         ].map(([icon, title, text]) => (
           <div key={title} className="card">
             <p className="mb-2 text-3xl" aria-hidden>{icon}</p>

@@ -28,8 +28,8 @@ async function sendVerification(userId: string, email: string) {
   });
   await sendEmail(
     email,
-    "Bevestig je e-mailadres voor Padli",
-    `Welkom bij Padli!\n\nKlik op deze link om je e-mailadres te bevestigen (24 uur geldig):\n${link(`/verifieer/${token}`)}\n\nHeb je geen account aangemaakt? Dan mag je deze mail negeren.`,
+    "Bevestig je e-mailadres voor Padoo",
+    `Welkom bij Padoo!\n\nKlik op deze link om je e-mailadres te bevestigen (24 uur geldig):\n${link(`/verifieer/${token}`)}\n\nHeb je geen account aangemaakt? Dan mag je deze mail negeren.`,
   );
 }
 
@@ -55,7 +55,7 @@ export async function register(_: ActionState, form: FormData): Promise<ActionSt
 
   const email = parsed.data.email.toLowerCase();
   const birthDate = new Date(parsed.data.birthDate);
-  if (ageOn(birthDate) < 16) return fail("Je moet minstens 16 jaar zijn om Padli te gebruiken.");
+  if (ageOn(birthDate) < 16) return fail("Je moet minstens 16 jaar zijn om Padoo te gebruiken.");
   if (ageOn(birthDate) > 110) return fail("Controleer je geboortedatum.");
 
   if (await db.user.findUnique({ where: { email } })) {
@@ -94,7 +94,7 @@ export async function login(_: ActionState, form: FormData): Promise<ActionState
     return fail("E-mailadres of wachtwoord klopt niet.");
   }
   attempts.delete(email);
-  if (user.status === "banned") return fail("Dit account is geblokkeerd. Neem contact op met het Padli-team als je denkt dat dit een vergissing is.");
+  if (user.status === "banned") return fail("Dit account is geblokkeerd. Neem contact op met het Padoo-team als je denkt dat dit een vergissing is.");
   if (user.status === "deleted") return fail("E-mailadres of wachtwoord klopt niet.");
 
   await createSession(user.id, form.get("remember") === "on");
@@ -134,7 +134,7 @@ export async function requestPasswordReset(_: ActionState, form: FormData): Prom
     });
     await sendEmail(
       email,
-      "Nieuw wachtwoord voor Padli",
+      "Nieuw wachtwoord voor Padoo",
       `Je vroeg een nieuw wachtwoord aan. Klik op deze link (1 uur geldig, één keer bruikbaar):\n${link(`/wachtwoord-resetten/${token}`)}\n\nVroeg je niets aan? Dan mag je deze mail negeren.`,
     );
   }

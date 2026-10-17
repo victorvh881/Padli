@@ -10,7 +10,7 @@ export function containsContactInfo(text: string): boolean {
 }
 
 export const CONTACT_WARNING =
-  "Deel geen telefoonnummer, e-mailadres of link. Gebruik de berichten in Padli; deel je nummer pas als je de ander vertrouwt.";
+  "Deel geen telefoonnummer, e-mailadres of link. Gebruik de berichten in Padoo; deel je nummer pas als je de ander vertrouwt.";
 
 export function slugifyUsername(s: string) {
   return s

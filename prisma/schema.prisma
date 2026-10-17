@@ -1,4 +1,4 @@
-// Padli datamodel (MVP). Gebaseerd op sectie 7 van het softwareontwerp.
+// Padoo datamodel (MVP). Gebaseerd op sectie 7 van het softwareontwerp.
 
 generator client {
   provider = "prisma-client-js"
@@ -7,7 +7,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 enum Role {

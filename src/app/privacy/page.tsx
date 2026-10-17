@@ -2,7 +2,7 @@ export const metadata = { title: "Privacybeleid" };
 
 export default function PrivacyPage() {
   return (
-    <article className="prose-padli mx-auto max-w-2xl">
+    <article className="prose-padoo mx-auto max-w-2xl">
       <h1 className="mb-4 text-3xl font-extrabold">Privacybeleid</h1>
       <p className="rounded-xl bg-amber-50 p-3 text-sm text-amber-900">Ontwerptekst: laat deze tekst nalezen voor de officiële lancering.</p>
       <h2>Welke gegevens bewaren we?</h2>
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       <h2>Je rechten</h2>
       <p>
         Je kunt je gegevens altijd downloaden en je account verwijderen via Instellingen. Na verwijdering worden je persoonsgegevens meteen
-        geanonimiseerd. Vragen? Mail het Padli-team.
+        geanonimiseerd. Vragen? Mail het Padoo-team.
       </p>
     </article>
   );

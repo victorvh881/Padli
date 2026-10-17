@@ -28,7 +28,7 @@ export async function ProfileForm({ user, onboarding }: { user: CurrentUser; onb
         <div>
           <label className="label" htmlFor="username">Gebruikersnaam</label>
           <input className="input" id="username" name="username" defaultValue={p.username} maxLength={24} pattern="[a-z0-9\-]+" required />
-          <p className="mt-1 text-xs text-stone-500">Voor je profiellink: padli.be/spelers/{p.username}</p>
+          <p className="mt-1 text-xs text-stone-500">Voor je profiellink: padoo.be/spelers/{p.username}</p>
         </div>
       </section>
 
@@ -85,7 +85,7 @@ export async function ProfileForm({ user, onboarding }: { user: CurrentUser; onb
         )}
       </section>
 
-      <SubmitButton className="btn w-full sm:w-auto">{onboarding ? "Klaar, naar Padli" : "Profiel opslaan"}</SubmitButton>
+      <SubmitButton className="btn w-full sm:w-auto">{onboarding ? "Klaar, naar Padoo" : "Profiel opslaan"}</SubmitButton>
     </ActionForm>
   );
 }

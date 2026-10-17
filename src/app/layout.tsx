@@ -4,11 +4,11 @@ import { Nav } from "@/components/Nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Padli – Vind. Speel. Verbind.", template: "%s · Padli" },
+  title: { default: "Padoo – Vind. Speel. Verbind.", template: "%s · Padoo" },
   description: "Vind padelspelers van jouw niveau in Leuven en omgeving. Plaats een oproep, reageer en speel.",
-  applicationName: "Padli",
+  applicationName: "Padoo",
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
-  openGraph: { siteName: "Padli", locale: "nl_BE", type: "website" },
+  openGraph: { siteName: "Padoo", locale: "nl_BE", type: "website" },
 };
 
 export const viewport: Viewport = { themeColor: "#15803d", width: "device-width", initialScale: 1 };
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <footer className="border-t border-stone-200 bg-white pb-20 md:pb-0">
           <div className="mx-auto flex max-w-5xl flex-wrap gap-x-5 gap-y-2 px-4 py-6 text-sm text-stone-600">
-            <span className="font-semibold text-brand-700">Padli · Vind. Speel. Verbind.</span>
+            <span className="font-semibold text-brand-700">Padoo · Vind. Speel. Verbind.</span>
             <Link href="/over">Over</Link>
             <Link href="/faq">FAQ</Link>
             <Link href="/communityregels">Communityregels</Link>

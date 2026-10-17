@@ -25,7 +25,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ token: 
         <>
           <h1 className="mb-2 text-2xl font-extrabold">Je e-mailadres is bevestigd 🎾</h1>
           <p className="mb-4 text-stone-600">Je kunt nu oproepen plaatsen, reageren en berichten sturen.</p>
-          <Link href="/dashboard" className="btn">Naar Padli</Link>
+          <Link href="/dashboard" className="btn">Naar Padoo</Link>
         </>
       ) : (
         <>

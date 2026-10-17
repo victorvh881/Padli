@@ -25,6 +25,6 @@ export async function GET() {
     },
   });
   return new NextResponse(JSON.stringify(data, null, 2), {
-    headers: { "content-type": "application/json", "content-disposition": 'attachment; filename="mijn-padli-gegevens.json"' },
+    headers: { "content-type": "application/json", "content-disposition": 'attachment; filename="mijn-padoo-gegevens.json"' },
   });
 }

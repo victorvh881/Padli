@@ -57,14 +57,14 @@ export async function handleReport(form: FormData) {
   if (target && action !== "dismiss") {
     const msg: Record<string, string> = {
       hide: "Een bericht, oproep of profieltekst van jou is verborgen omdat het de communityregels niet volgt.",
-      warn: "Je krijgt een waarschuwing van het Padli-team.",
+      warn: "Je krijgt een waarschuwing van het Padoo-team.",
       suspend7: "Je account is 7 dagen geschorst.",
       suspend30: "Je account is 30 dagen geschorst.",
       ban: "Je account is permanent geblokkeerd.",
     };
-    await notify(target, "moderation", msg[action] ?? "Het Padli-team heeft een melding over jou behandeld.", "/communityregels", `Reden: ${reason}`);
+    await notify(target, "moderation", msg[action] ?? "Het Padoo-team heeft een melding over jou behandeld.", "/communityregels", `Reden: ${reason}`);
   }
-  if (report.reporterId) await notify(report.reporterId, "report_handled", "Je melding is behandeld. Bedankt om Padli veilig te houden.");
+  if (report.reporterId) await notify(report.reporterId, "report_handled", "Je melding is behandeld. Bedankt om Padoo veilig te houden.");
   revalidatePath("/admin", "layout");
 }
 

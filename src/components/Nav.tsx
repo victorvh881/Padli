@@ -14,7 +14,7 @@ export async function Nav() {
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4">
           <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 text-xl font-extrabold tracking-tight text-brand-700">
             <span aria-hidden className="inline-block h-5 w-5 rounded-full bg-ball ring-2 ring-brand-600" />
-            Padli
+            Padoo
           </Link>
           <nav className="ml-auto hidden items-center gap-5 text-sm font-semibold md:flex" aria-label="Hoofdmenu">
             <Link href="/oproepen" className="hover:text-brand-700">Oproepen</Link>
